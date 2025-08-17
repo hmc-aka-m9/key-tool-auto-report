@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Random Key Mỗi Giờ</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+    .key-box { 
+      font-size: 28px; 
+      font-weight: bold; 
+      padding: 20px; 
+      border: 2px solid #333; 
+      display: inline-block; 
+      border-radius: 10px; 
+      background: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+  <h2>🔑 Key Tool (reset mỗi 1 giờ)</h2>
+  <div id="key" class="key-box"></div>
+
+  <script>
+    function generateKey() {
+      let numbers = "";
+      for (let i = 0; i < 8; i++) {
+        numbers += Math.floor(Math.random() * 10); // sinh số ngẫu nhiên 0-9
+      }
+      return "hmctricker_" + numbers;
+    }
+
+    function getKey() {
+      const now = Date.now();
+      const saved = JSON.parse(localStorage.getItem("randomKeyData"));
+
+      if (saved && now - saved.time < 3600 * 1000) {
+        return saved.key;
+      } else {
+        const newKey = generateKey();
+        localStorage.setItem("randomKeyData", JSON.stringify({ key: newKey, time: now }));
+        return newKey;
+      }
+    }
+
+    document.getElementById("key").textContent = getKey();
+  </script>
+</body>
+  </html>
